@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "My Extension",
+    "name": "My Vite Extension",
     "version": "1.0.0",
     "description": "A basic chrome extension with only required keys",
     "icons": {
@@ -10,7 +10,9 @@
         "service_worker": "service-worker.js",
         "type": "module"
     },
-    "action": {},
+    "action": {
+        "default_popup": "index.html"
+    },
     "permissions": [
         "scripting"
     ],
