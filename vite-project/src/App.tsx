@@ -4,14 +4,15 @@ import './App.css'
 import { useState } from 'react'
 
 function App() {
-  const [color, setColor] = useState();
+  const [color, setColor] = useState('');
 
   const alertFunc = async ()=> {
     const [tab] = await chrome.tabs.query({active: true});
-    chrome.scripting.executeScript({
+    chrome.scripting.executeScript<string[], void>({
       target: {tabId: tab.id!},
-      func: ()=>{
-        document.body.style.backgroundColor = 'red';
+      args: [color],
+      func: (color)=>{
+        document.body.style.backgroundColor = color;
       }
     })
   }
@@ -29,7 +30,7 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
 
-        <input></input>
+        <input type='color' onChange={(e) => setColor(e.currentTarget.value) }></input>
         <button onClick={alertFunc}>Click me</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
