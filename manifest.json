@@ -3,11 +3,19 @@
     "name": "My Extension",
     "version": "1.0.0",
     "description": "A basic chrome extension with only required keys",
-  "icons": {
-    "32": "icon-32.png"
-  },
-  "background": {
-    "service_worker": "service-worker.js",
-    "type": "module"
-  }
+    "icons": {
+        "32": "icon-32.png"
+    },
+    "background": {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    },
+    "action": {},
+    "permissions": [
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ]
 }
