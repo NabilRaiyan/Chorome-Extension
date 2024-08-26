@@ -3,34 +3,41 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { useState } from 'react'
 
+
 function App() {
   const [color, setColor] = useState('');
 
   const getUrl = async () => {
-    const [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id!},
-      args: [tab],
-      func: (tab) => {
-        const url = tab.url;
-        try{
-          const queryString = url?.split('?')[1];
-          const searchParam = new URLSearchParams(queryString);
-          const searchString = searchParam.get('q');
-          const searchWords = searchString ? searchString.split('%20'): [];
-          console.log(searchWords)
-          if(searchWords === null || searchWords.length === 0){
-            const query = url?.split('/');
-            const lastWord = query ? query[query.length - 1] : '';
-            console.log(lastWord);
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id! },
+        args: [tab],
+        func: (tab) => {
+          const url = tab.url;
+          if (!url) {
+            console.error('URL not found');
+            return;
+          }
+          // Parse URL for query parameters
+          const queryString = url.split('?')[1];
+          if (queryString) {
+            const searchParam = new URLSearchParams(queryString);
+            const searchString = searchParam.get('q');
+            const searchWords = searchString ? searchString.split('%20') : [];
+            console.log('Search Words:', searchWords);
+          } else {
+            // Fallback if no query string is found
+            const query = url.split('/');
+            const lastWord = query[query.length - 1];
+            console.log('Last part of URL:', lastWord);
           }
         }
-        catch(e){
-          console.log(e)
-        }
-        
-      }
-    });
+      });
+    } catch (e) {
+      console.error('Error:', e);
+    }
   };
   
   // Call the function
